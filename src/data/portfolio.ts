@@ -6,7 +6,7 @@ export const portfolioData = {
     email: "masumrezamunna2005@gmail.com",
     phone: "01763474359",
     whatsapp: "01763474359",
-    heroPhoto: "https://i.ibb.co/Mx3ypxPw/my-photo-copy.jpg",
+    heroPhoto: "https://i.ibb.co/MD0nTTsF/Chat-GPT-Image-Jun-17-2026-07-26-52-PM.png",
   },
   social: {
     github: "https://github.com/MasumRezaMunna",
