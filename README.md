@@ -1,5 +1,7 @@
 # MD Masum Reza Munna — Portfolio
 
+Live: https://my-portfolio-nu-seven-i5850ht0pk.vercel.app
+
 A professional portfolio built with **Next.js 14**, **TypeScript**, **Tailwind CSS v3**, **Framer Motion**, and **GSAP**.
 
 ## Tech Stack
