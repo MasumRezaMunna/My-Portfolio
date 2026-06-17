@@ -25,10 +25,10 @@ export default function Contact() {
         <FadeIn>
           <SectionLabel number="05" label="Contact" />
           <h2 className="font-display text-3xl sm:text-4xl xl:text-5xl font-bold leading-tight mb-4">
-            Let's Work <span className="gradient-text">Together</span>
+            Let&apos;s Work <span className="gradient-text">Together</span>
           </h2>
           <p className="text-muted text-base max-w-xl mb-12">
-            I'm currently open to freelance projects and full-time opportunities. Whether you have a question, a project idea, or just want to say hello — feel free to reach out!
+            I&apos;m currently open to freelance projects and full-time opportunities. Whether you have a question, a project idea, or just want to say hello — feel free to reach out!
           </p>
         </FadeIn>
 
@@ -63,7 +63,7 @@ export default function Contact() {
           <FadeIn delay={0.25}>
             <div>
               <p className="font-mono-custom text-xs text-muted tracking-widest uppercase mb-5">
-                // Connect on social media
+                {"// Connect on social media"}
               </p>
               <div className="flex flex-wrap gap-3">
                 {socialLinks.map((s) => (
@@ -84,7 +84,7 @@ export default function Contact() {
               {/* CTA email box */}
               <div className="mt-10 glass-card rounded-2xl p-6">
                 <p className="font-mono-custom text-xs text-brand-cyan mb-2 tracking-widest uppercase">
-                  // Preferred contact
+                  {"// Preferred contact"}
                 </p>
                 <p className="font-display font-bold text-xl text-white mb-1">
                   Drop me an email

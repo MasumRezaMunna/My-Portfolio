@@ -96,7 +96,7 @@ export default function Hero() {
               variants={itemVariants}
               className="font-mono-custom text-xs text-brand-cyan tracking-widest uppercase mb-4"
             >
-              // Hello World 👋
+              {"// Hello World 👋"}
             </motion.p>
 
             <motion.h1
