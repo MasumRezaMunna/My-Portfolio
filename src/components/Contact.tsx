@@ -28,7 +28,7 @@ export default function Contact() {
             Let&apos;s Work <span className="gradient-text">Together</span>
           </h2>
           <p className="text-muted text-base max-w-xl mb-12">
-            I&apos;m currently open to freelance projects and full-time opportunities. Whether you have a question, a project idea, or just want to say hello — feel free to reach out!
+            I&apos;m currently open to freelance projects and full-time opportunities. Whether you have a question, a project idea, or just want to say hello. feel free to reach out!
           </p>
         </FadeIn>
 
