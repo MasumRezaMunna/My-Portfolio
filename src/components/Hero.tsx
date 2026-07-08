@@ -29,9 +29,21 @@ const WhatsappIcon = () => (
 
 const socialLinks = [
   { icon: GithubIcon, href: portfolioData.social.github, label: "GitHub" },
-  { icon: LinkedinIcon, href: portfolioData.social.linkedin, label: "LinkedIn" },
-  { icon: FacebookIcon, href: portfolioData.social.facebook, label: "Facebook" },
-  { icon: WhatsappIcon, href: portfolioData.social.whatsapp, label: "WhatsApp" },
+  {
+    icon: LinkedinIcon,
+    href: portfolioData.social.linkedin,
+    label: "LinkedIn",
+  },
+  {
+    icon: FacebookIcon,
+    href: portfolioData.social.facebook,
+    label: "Facebook",
+  },
+  {
+    icon: WhatsappIcon,
+    href: portfolioData.social.whatsapp,
+    label: "WhatsApp",
+  },
 ];
 
 const containerVariants = {
@@ -40,7 +52,11 @@ const containerVariants = {
 };
 const itemVariants = {
   hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
+  },
 };
 
 export default function Hero() {
@@ -129,10 +145,11 @@ export default function Hero() {
             >
               <a
                 href="/resume.pdf"
-                download
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-brand hover:-translate-y-0.5 hover:shadow-glow transition-all duration-200 text-sm"
               >
-                ⬇ Download Resume
+                📄 View Resume
               </a>
               <a
                 href="#projects"
@@ -143,7 +160,10 @@ export default function Hero() {
             </motion.div>
 
             {/* Social Links */}
-            <motion.div variants={itemVariants} className="flex items-center gap-3">
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-3"
+            >
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
@@ -163,7 +183,11 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{
+              duration: 0.9,
+              delay: 0.3,
+              ease: [0.34, 1.56, 0.64, 1],
+            }}
             className="order-1 lg:order-2 flex justify-center relative"
           >
             <div className="relative w-64 h-64 sm:w-80 sm:h-80">
@@ -213,8 +237,12 @@ export default function Hero() {
               transition={{ delay: 0.9, duration: 0.6 }}
               className="absolute top-4 right-0 sm:-right-4 glass-card rounded-2xl px-4 py-3"
             >
-              <p className="font-mono-custom text-[11px] text-muted mb-1">Stack</p>
-              <p className="font-display font-bold text-sm gradient-text">MERN</p>
+              <p className="font-mono-custom text-[11px] text-muted mb-1">
+                Stack
+              </p>
+              <p className="font-display font-bold text-sm gradient-text">
+                MERN
+              </p>
             </motion.div>
           </motion.div>
         </div>
