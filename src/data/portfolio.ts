@@ -10,7 +10,7 @@ export const portfolioData = {
   },
   social: {
     github: "https://github.com/MasumRezaMunna",
-    linkedin: "https://www.linkedin.com/in/md-masum-reza-munna-22760a223",
+    linkedin: "https://www.linkedin.com/in/masumrezamunna",
     facebook: "https://www.facebook.com/masum.reza.munna.2003",
     whatsapp: "https://wa.me/8801763474359",
   },
@@ -45,7 +45,24 @@ export const portfolioData = {
       year: "2025 – Present",
       details:
         "Currently pursuing degree with a focus on software development, web technologies, and problem-solving. Building practical skills alongside academic knowledge through hands-on projects.",
+      tags: ["Software Engineering", "Web Technologies", "Problem Solving"],
     },
+    {
+      school: "Rajshahi Shikkha Board Govt. Model School & College",
+      degree: "Higher Secondary Certificate (HSC)",
+      field: "Science",
+      year: "2022 – 2024",
+      details: "Completed higher secondary education with a focus on science and mathematics, building a strong analytical foundation.",
+      gpa: "GPA: 5.00 out of 5.00",
+    },
+    {
+      school: "Ramdeo Bazla Govt. High School, Joypurhat",
+      degree: "Secondary School Certificate (SSC)",
+      field: "Science",
+      year: "2020 – 2022",
+      details: "Completed secondary education with excellent grades, participating in various extracurricular and science club activities.",
+      gpa: "GPA: 5.00 out of 5.00",
+    }
   ],
   projects: [
     {

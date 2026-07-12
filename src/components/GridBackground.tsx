@@ -1,10 +1,14 @@
-"use client";
-
 export default function GridBackground() {
   return (
     <div
-      className="fixed inset-0 pointer-events-none z-0 grid-bg opacity-100"
-      aria-hidden="true"
+      className="fixed inset-0 z-0 pointer-events-none"
+      style={{
+        backgroundImage: `
+          linear-gradient(rgba(79,142,247,0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(79,142,247,0.035) 1px, transparent 1px)
+        `,
+        backgroundSize: "60px 60px",
+      }}
     />
   );
 }

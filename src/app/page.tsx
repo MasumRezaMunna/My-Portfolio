@@ -7,11 +7,17 @@ import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import GridBackground from "@/components/GridBackground";
+import ParticleBackground from "@/components/ParticleBackground";
+import Cursor from "@/components/Cursor";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-navy">
+    <main className="relative min-h-screen" style={{ background: "#050A18" }}>
+      <LoadingScreen />
+      <Cursor />
       <GridBackground />
+      <ParticleBackground />
       <Navbar />
       <Hero />
       <About />

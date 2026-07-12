@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { Download } from "lucide-react";
 import Image from "next/image";
+import { TypeAnimation } from "react-type-animation";
 import { portfolioData } from "@/data/portfolio";
 
 // Social SVG icons
@@ -28,30 +30,25 @@ const WhatsappIcon = () => (
 );
 
 const socialLinks = [
-  { icon: GithubIcon, href: portfolioData.social.github, label: "GitHub" },
-  {
-    icon: LinkedinIcon,
-    href: portfolioData.social.linkedin,
-    label: "LinkedIn",
-  },
-  {
-    icon: FacebookIcon,
-    href: portfolioData.social.facebook,
-    label: "Facebook",
-  },
-  {
-    icon: WhatsappIcon,
-    href: portfolioData.social.whatsapp,
-    label: "WhatsApp",
-  },
+  { icon: GithubIcon, href: portfolioData.social.github, label: "GitHub", color: "#4F8EF7" },
+  { icon: LinkedinIcon, href: portfolioData.social.linkedin, label: "LinkedIn", color: "#00FFC8" },
+  { icon: FacebookIcon, href: portfolioData.social.facebook, label: "Facebook", color: "#7C3AED" },
+  { icon: WhatsappIcon, href: portfolioData.social.whatsapp, label: "WhatsApp", color: "#00FFC8" },
+];
+
+const orbitBadges = [
+  { label: "React", emoji: "⚛️", className: "orbit-badge-1" },
+  { label: "Node", emoji: "🟢", className: "orbit-badge-2" },
+  { label: "Next", emoji: "▲", className: "orbit-badge-1", style: { animationDelay: "-6s" } },
+  { label: "Mongo", emoji: "🍃", className: "orbit-badge-2", style: { animationDelay: "-9s" } },
 ];
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 const itemVariants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
@@ -59,19 +56,61 @@ const itemVariants = {
   },
 };
 
+// Magnetic Button Hook
+function useMagnetic(strength = 0.35) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = (e: React.MouseEvent) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    el.style.transform = `translate(${dx * strength}px, ${dy * strength}px)`;
+  };
+  const onLeave = () => {
+    if (ref.current) ref.current.style.transform = "";
+  };
+  return { ref, onMove, onLeave };
+}
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
+  const magPrimary = useMagnetic(0.3);
+  const magSecondary = useMagnetic(0.3);
 
   useEffect(() => {
-    // GSAP loaded dynamically to keep SSR safe
+    // 3D tilt on photo
+    const el = photoRef.current;
+    if (!el) return;
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      el.style.transform = `perspective(600px) rotateY(${dx * 12}deg) rotateX(${-dy * 12}deg) scale(1.02)`;
+    };
+    const onLeave = () => {
+      el.style.transform = "perspective(600px) rotateY(0deg) rotateX(0deg) scale(1)";
+    };
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  useEffect(() => {
     const initGSAP = async () => {
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
-
-      // Parallax on scroll for the whole hero
       gsap.to(".hero-parallax", {
-        yPercent: -18,
+        yPercent: -15,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -79,15 +118,6 @@ export default function Hero() {
           end: "bottom top",
           scrub: true,
         },
-      });
-
-      // Floating code badge
-      gsap.to(".code-badge", {
-        y: -10,
-        duration: 2.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
       });
     };
     initGSAP();
@@ -97,39 +127,77 @@ export default function Hero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative z-10 min-h-screen flex items-center pt-16 px-6 md:px-12"
+      className="relative z-10 min-h-screen flex items-center pt-20 px-6 md:px-12 overflow-hidden"
     >
+      {/* Background glow blobs */}
+      <div
+        className="orb w-[600px] h-[600px] pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse, rgba(79,142,247,0.08) 0%, transparent 70%)",
+          top: "10%",
+          left: "-10%",
+          filter: "blur(60px)",
+          position: "absolute",
+        }}
+      />
+      <div
+        className="orb w-[400px] h-[400px] pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 70%)",
+          top: "30%",
+          right: "-5%",
+          filter: "blur(60px)",
+          position: "absolute",
+        }}
+      />
+
       <div className="max-w-6xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center hero-parallax">
-          {/* Left — Text */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center hero-parallax">
+          {/* LEFT — Text */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="order-2 lg:order-1"
           >
-            <motion.p
-              variants={itemVariants}
-              className="font-mono-custom text-xs text-brand-cyan tracking-widest uppercase mb-4"
-            >
-              {"// Hello World 👋"}
-            </motion.p>
+            <motion.div variants={itemVariants} className="mb-4 flex items-center gap-3">
+              <span className="inline-block w-8 h-px bg-brand-cyan" />
+              <span className="font-mono-custom text-xs text-brand-cyan tracking-widest uppercase">
+                Hello World 👋
+              </span>
+            </motion.div>
 
             <motion.h1
               variants={itemVariants}
-              className="font-display text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.08] mb-3"
+              className="font-display text-5xl sm:text-6xl xl:text-7xl font-extrabold leading-[1.0] mb-4"
             >
-              MD Masum
+              <span className="text-white">MD Masum</span>
               <br />
-              <span className="gradient-text">Reza Munna</span>
+              <span className="gradient-text-violet">Reza Munna</span>
             </motion.h1>
 
             <motion.div
               variants={itemVariants}
-              className="font-mono-custom text-lg sm:text-xl text-brand-blue mb-5 flex items-center gap-1"
+              className="font-mono-custom text-lg sm:text-xl text-brand-cyan mb-5 flex items-center gap-2 h-8"
             >
-              {portfolioData.personal.designation}
-              <span className="inline-block w-0.5 h-5 bg-brand-cyan ml-1 cursor-blink" />
+              <span className="text-muted">{"// "}</span>
+              <TypeAnimation
+                sequence={[
+                  "MERN Stack Developer",
+                  2000,
+                  "React.js Engineer",
+                  2000,
+                  "Full-Stack Builder",
+                  2000,
+                  "UI Craftsman",
+                  2000,
+                ]}
+                wrapper="span"
+                speed={50}
+                repeat={Infinity}
+                className="text-brand-cyan"
+              />
+              <span className="inline-block w-0.5 h-5 bg-brand-cyan cursor-blink ml-0.5" />
             </motion.div>
 
             <motion.p
@@ -139,39 +207,58 @@ export default function Hero() {
               {portfolioData.personal.bio}
             </motion.p>
 
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-wrap gap-3 mb-10"
-            >
+            {/* CTA Buttons */}
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mb-10">
               <a
+                ref={magPrimary.ref}
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-brand hover:-translate-y-0.5 hover:shadow-glow transition-all duration-200 text-sm"
+                onMouseMove={magPrimary.onMove}
+                onMouseLeave={magPrimary.onLeave}
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-bold text-sm relative overflow-hidden group"
+                style={{
+                  background: "linear-gradient(135deg, #4F8EF7 0%, #00FFC8 100%)",
+                  color: "#050A18",
+                  transition: "transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease",
+                  boxShadow: "0 0 30px rgba(79,142,247,0.3)",
+                }}
               >
-                📄 View Resume
+                <span className="relative z-10 flex items-center gap-2"><Download className="w-4 h-4" /> View Resume</span>
+                <span className="absolute inset-0 shimmer-btn opacity-60" />
               </a>
               <a
+                ref={magSecondary.ref}
                 href="#projects"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white border border-brand-blue/30 hover:border-brand-blue hover:text-brand-blue transition-all duration-200 text-sm"
+                onMouseMove={magSecondary.onMove}
+                onMouseLeave={magSecondary.onLeave}
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl font-semibold text-sm text-white border border-brand-blue/30 hover:border-brand-cyan/60 hover:text-brand-cyan hover:bg-brand-cyan/5 transition-all duration-200"
               >
                 View Projects →
               </a>
             </motion.div>
 
             {/* Social Links */}
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center gap-3"
-            >
-              {socialLinks.map(({ icon: Icon, href, label }) => (
+            <motion.div variants={itemVariants} className="flex items-center gap-3">
+              {socialLinks.map(({ icon: Icon, href, label, color }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 rounded-xl border border-brand-blue/25 text-muted flex items-center justify-center hover:border-brand-blue hover:text-brand-blue hover:bg-brand-blue/10 transition-all duration-200"
+                  className="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-muted transition-all duration-200 group"
+                  style={{"--hover-color": color} as React.CSSProperties}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.color = color;
+                    (e.currentTarget as HTMLElement).style.borderColor = color + "55";
+                    (e.currentTarget as HTMLElement).style.boxShadow = `0 0 16px ${color}33`;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.color = "";
+                    (e.currentTarget as HTMLElement).style.borderColor = "";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "";
+                  }}
                 >
                   <Icon />
                 </a>
@@ -179,39 +266,56 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Photo */}
+          {/* RIGHT — Photo */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.9,
-              delay: 0.3,
-              ease: [0.34, 1.56, 0.64, 1],
-            }}
-            className="order-1 lg:order-2 flex justify-center relative"
+            transition={{ duration: 1, delay: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            className="order-1 lg:order-2 flex justify-center"
           >
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80">
+            <div
+              ref={photoRef}
+              className="relative w-72 h-72 sm:w-[340px] sm:h-[340px]"
+              style={{ transition: "transform 0.15s ease", transformStyle: "preserve-3d" }}
+            >
+              {/* Orbit badges */}
+              {orbitBadges.map((badge, i) => (
+                <div
+                  key={i}
+                  className={badge.className}
+                  style={badge.style}
+                >
+                  <div className="glass-card-bright rounded-xl px-2.5 py-1.5 flex items-center gap-1.5 whitespace-nowrap shadow-card">
+                    <span className="text-sm">{badge.emoji}</span>
+                    <span className="font-mono-custom text-[10px] text-brand-cyan font-medium">
+                      {badge.label}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
               {/* Spinning rings */}
               <div
-                className="absolute inset-[-28px] rounded-full spin-ring"
+                className="absolute inset-[-32px] rounded-full spin-ring opacity-30"
                 style={{
-                  background:
-                    "conic-gradient(from 0deg, #4F8EF7, #00D4FF, #4F8EF7)",
-                  opacity: 0.35,
+                  background: "conic-gradient(from 0deg, #4F8EF7, #00FFC8, #7C3AED, #4F8EF7)",
                 }}
               />
               <div
-                className="absolute inset-[-14px] rounded-full spin-ring-reverse"
+                className="absolute inset-[-16px] rounded-full spin-ring-reverse opacity-15"
                 style={{
-                  background:
-                    "conic-gradient(from 180deg, #00D4FF, #4F8EF7, #00D4FF)",
-                  opacity: 0.2,
+                  background: "conic-gradient(from 180deg, #00FFC8, #7C3AED, #4F8EF7, #00FFC8)",
                 }}
               />
+
               {/* Glow */}
-              <div className="absolute inset-0 rounded-full bg-brand-blue/20 blur-2xl" />
+              <div
+                className="absolute inset-0 rounded-full blur-3xl opacity-40"
+                style={{ background: "radial-gradient(ellipse, #4F8EF7 0%, #7C3AED 50%, transparent 70%)" }}
+              />
+
               {/* Photo */}
-              <div className="absolute inset-2 rounded-full overflow-hidden border-2 border-brand-blue/40">
+              <div className="absolute inset-3 rounded-full overflow-hidden border-[3px] border-brand-blue/30" style={{ boxShadow: "0 0 40px rgba(79,142,247,0.2)" }}>
                 <Image
                   src={portfolioData.personal.heroPhoto}
                   alt={portfolioData.personal.fullName}
@@ -220,30 +324,33 @@ export default function Hero() {
                   priority
                 />
               </div>
-            </div>
 
-            {/* Floating badge */}
-            <div className="code-badge absolute bottom-0 left-0 sm:-left-8 glass-card rounded-2xl px-4 py-3 flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-green-400 pulse-dot" />
-              <span className="font-mono-custom text-[11px] text-brand-cyan">
-                Open to opportunities
-              </span>
-            </div>
+              {/* Status badge */}
+              <motion.div
+                animate={{ y: [-4, 4, -4] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -bottom-4 -left-4 sm:-left-10 glass-card-bright rounded-2xl px-4 py-2.5 flex items-center gap-2.5 shadow-glow-sm"
+              >
+                <span className="w-2 h-2 rounded-full bg-brand-cyan pulse-dot" />
+                <span className="font-mono-custom text-[11px] text-brand-cyan font-medium">
+                  Open to opportunities
+                </span>
+              </motion.div>
 
-            {/* Stack badge */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              className="absolute top-4 right-0 sm:-right-4 glass-card rounded-2xl px-4 py-3"
-            >
-              <p className="font-mono-custom text-[11px] text-muted mb-1">
-                Stack
-              </p>
-              <p className="font-display font-bold text-sm gradient-text">
-                MERN
-              </p>
-            </motion.div>
+              {/* Stack badge */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                whileHover={{ scale: 1.05 }}
+                className="absolute top-0 -right-4 sm:-right-8 glass-card-bright rounded-2xl px-4 py-2.5 text-center shadow-card"
+              >
+                <p className="font-mono-custom text-[9px] text-muted uppercase tracking-widest mb-0.5">
+                  Stack
+                </p>
+                <p className="font-display font-extrabold text-base gradient-text">MERN</p>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
 
@@ -251,16 +358,16 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          transition={{ delay: 2, duration: 0.6 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span className="font-mono-custom text-[10px] text-muted tracking-widest uppercase">
+          <span className="font-mono-custom text-[9px] text-muted tracking-[0.3em] uppercase">
             Scroll
           </span>
           <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-8 bg-gradient-to-b from-brand-blue/60 to-transparent"
+            animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="w-px h-10 bg-gradient-to-b from-brand-blue/60 to-transparent"
           />
         </motion.div>
       </div>

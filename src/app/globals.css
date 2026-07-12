@@ -2,9 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 :root {
+  --font-syne: "Syne", sans-serif;
   --font-space-grotesk: "Space Grotesk", sans-serif;
   --font-inter: "Inter", sans-serif;
   --font-jetbrains: "JetBrains Mono", monospace;
@@ -15,28 +16,102 @@ html {
 }
 
 body {
-  background-color: #060d1f;
+  background-color: #050A18;
   color: #f0f4ff;
   font-family: var(--font-inter);
   overflow-x: hidden;
 }
 
-/* Custom scrollbar */
+/* ========================================
+   NOISE TEXTURE OVERLAY
+======================================== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR
+======================================== */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1630;
+  background: #050A18;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(79, 142, 247, 0.4);
+  background: linear-gradient(180deg, #4F8EF7, #00FFC8);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(79, 142, 247, 0.7);
+  background: linear-gradient(180deg, #7C3AED, #4F8EF7);
 }
 
-/* Grid background */
+/* ========================================
+   CUSTOM CURSOR
+======================================== */
+* {
+  cursor: none !important;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #00FFC8;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, background 0.2s ease, width 0.2s ease, height 0.2s ease;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(79, 142, 247, 0.6);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: all 0.15s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.cursor-ring.hovering {
+  width: 60px;
+  height: 60px;
+  border-color: rgba(0, 255, 200, 0.5);
+  background: rgba(0, 255, 200, 0.04);
+}
+
+/* ========================================
+   SCROLL PROGRESS BAR
+======================================== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #7C3AED, #4F8EF7, #00FFC8);
+  z-index: 9999;
+  transform-origin: left;
+  transition: transform 0.05s linear;
+}
+
+/* ========================================
+   GRID BACKGROUND
+======================================== */
 .grid-bg {
   background-image: linear-gradient(
       rgba(79, 142, 247, 0.04) 1px,
@@ -46,38 +121,59 @@ body {
   background-size: 60px 60px;
 }
 
-/* Gradient text */
+/* ========================================
+   GRADIENT TEXT
+======================================== */
 .gradient-text {
-  background: linear-gradient(135deg, #4f8ef7 0%, #00d4ff 100%);
+  background: linear-gradient(135deg, #4F8EF7 0%, #00FFC8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glass card */
-.glass-card {
-  background: rgba(13, 22, 48, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(79, 142, 247, 0.18);
+.gradient-text-violet {
+  background: linear-gradient(135deg, #7C3AED 0%, #4F8EF7 50%, #00FFC8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Spinning ring animation */
+/* ========================================
+   GLASS CARD
+======================================== */
+.glass-card {
+  background: rgba(10, 18, 40, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(79, 142, 247, 0.15);
+}
+
+.glass-card-bright {
+  background: rgba(15, 26, 56, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(79, 142, 247, 0.25);
+}
+
+/* ========================================
+   SPINNING RINGS
+======================================== */
 @keyframes spin-ring {
   to { transform: rotate(360deg); }
 }
 @keyframes spin-ring-reverse {
   to { transform: rotate(-360deg); }
 }
-
 .spin-ring {
-  animation: spin-ring 8s linear infinite;
+  animation: spin-ring 10s linear infinite;
 }
 .spin-ring-reverse {
-  animation: spin-ring-reverse 6s linear infinite;
+  animation: spin-ring-reverse 7s linear infinite;
 }
 
-/* Cursor blink */
+/* ========================================
+   CURSOR BLINK
+======================================== */
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -86,36 +182,202 @@ body {
   animation: cursor-blink 1s step-end infinite;
 }
 
-/* Pulse dot */
+/* ========================================
+   PULSE DOT
+======================================== */
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(0,255,200,0.4); }
+  50% { opacity: 0.8; transform: scale(0.9); box-shadow: 0 0 0 6px rgba(0,255,200,0); }
 }
 .pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-/* Skill bar fill */
+/* ========================================
+   SHIMMER BUTTON
+======================================== */
+.shimmer-btn {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 2.5s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ========================================
+   TIMELINE LINE DRAW
+======================================== */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #4F8EF7, #00FFC8);
+  transform: translateX(-50%);
+  transform-origin: top;
+}
+
+/* ========================================
+   MARQUEE
+======================================== */
+.marquee-track {
+  display: flex;
+  gap: 1.25rem;
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+.marquee-track-reverse {
+  display: flex;
+  gap: 1.25rem;
+  animation: marquee 25s linear infinite reverse;
+  width: max-content;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ========================================
+   SKILL BAR FILL
+======================================== */
 .skill-fill {
   transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Section label line */
+/* ========================================
+   SECTION LABEL LINE
+======================================== */
 .section-label::before {
   content: "";
   display: inline-block;
   width: 24px;
   height: 1px;
-  background: #00d4ff;
+  background: #00FFC8;
   margin-right: 8px;
   vertical-align: middle;
 }
 
+/* ========================================
+   GLITCH EFFECT
+======================================== */
+@keyframes glitch {
+  0%, 100% { transform: translate(0); clip-path: none; }
+  20% { transform: translate(-2px, 1px); clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%); }
+  40% { transform: translate(2px, -1px); clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); }
+  60% { transform: translate(-1px, 2px); clip-path: polygon(0 10%, 100% 10%, 100% 25%, 0 25%); }
+  80% { transform: translate(1px, -2px); clip-path: none; }
+}
+
+/* ========================================
+   ORBIT ANIMATIONS
+======================================== */
+@keyframes orbit1 {
+  0% { transform: rotate(0deg) translateX(110px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(110px) rotate(-360deg); }
+}
+@keyframes orbit2 {
+  0% { transform: rotate(180deg) translateX(145px) rotate(-180deg); }
+  100% { transform: rotate(540deg) translateX(145px) rotate(-540deg); }
+}
+
+.orbit-badge-1 {
+  position: absolute;
+  animation: orbit1 12s linear infinite;
+  top: 50%;
+  left: 50%;
+  margin-top: -18px;
+  margin-left: -18px;
+}
+.orbit-badge-2 {
+  position: absolute;
+  animation: orbit2 18s linear infinite;
+  top: 50%;
+  left: 50%;
+  margin-top: -18px;
+  margin-left: -18px;
+}
+
+/* ========================================
+   HEXAGON CLIP
+======================================== */
+.hex-clip {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* ========================================
+   LOADING SCREEN
+======================================== */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: #050A18;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* ========================================
+   RADIAL PROGRESS
+======================================== */
+.radial-progress {
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   GRADIENT BORDER
+======================================== */
+.gradient-border {
+  position: relative;
+  border-radius: 1rem;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(79,142,247,0.5), rgba(0,255,200,0.3), rgba(124,58,237,0.5));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ========================================
+   GLOW ORBS
+======================================== */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* ========================================
+   UTILITY CLASSES
+======================================== */
 @layer utilities {
   .font-display {
+    font-family: var(--font-syne);
+  }
+  .font-display-alt {
     font-family: var(--font-space-grotesk);
   }
   .font-mono-custom {
     font-family: var(--font-jetbrains);
+  }
+  .text-balance {
+    text-wrap: balance;
   }
 }
